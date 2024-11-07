@@ -1,0 +1,1 @@
+@appInfo.name@ @appInfo.version@ (git commit: @appInfo.gitRevision@, build time: @appInfo.buildTime@)

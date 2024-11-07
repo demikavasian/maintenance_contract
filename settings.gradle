@@ -1,0 +1,3 @@
+rootProject.name = 'TEMPLATE_PROJECT'
+include 'TEMPLATE_PROJECT-server'
+include 'TEMPLATE_PROJECT-api'

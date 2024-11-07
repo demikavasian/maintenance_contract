@@ -1,0 +1,74 @@
+import static io.myplant.gradle.standards.GitUtils.getVersion
+
+buildscript {
+    ext {
+        commonsVersion = '11.4.5'
+        springBootVersion = '3.3.2'
+        springCloudVersion = '2023.0.3'
+    }
+
+    def myPlantRepo = Eval.me(innioRepositories)['myPlant']
+    repositories {
+        mavenLocal()
+        maven {
+            url myPlantRepo['url']
+            credentials {
+                username myPlantRepo['username'].toString()
+                password myPlantRepo['password'].toString()
+            }
+        }
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "io.myplant.gradle:gradle-plugins:3.9.0"
+    }
+}
+
+ext {
+    artifactName = project.name + '_' + getVersion(project)
+}
+
+allprojects {
+    group 'io.myplant'
+
+    apply plugin: 'java-library'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+            vendor = JvmVendorSpec.ADOPTIUM
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.myplant.gradle.standards'
+
+    dependencies {
+        // spring boot
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+
+        // logging
+        implementation('org.slf4j:jcl-over-slf4j:2.0.9')
+        implementation('ch.qos.logback:logback-classic:1.4.11')
+
+        // miscellaneous
+        implementation('commons-io:commons-io:2.16.1')
+        implementation('org.apache.commons:commons-lang3:3.17.0')
+        implementation('org.apache.commons:commons-collections4:4.4')
+    }
+
+    test {
+        useJUnitPlatform()
+        systemProperty 'spring.profiles.active', 'test'
+        systemProperty 'user.timezone', 'UTC'
+
+        testLogging {
+            events 'started', 'passed', 'skipped', 'failed'
+        }
+    }
+}

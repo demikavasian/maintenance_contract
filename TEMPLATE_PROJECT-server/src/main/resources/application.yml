@@ -1,0 +1,59 @@
+seshat:
+  url: https://alpha.staging.myplant.io
+server:
+  port: 1234
+
+spring:
+  application:
+    name: TEMPLATE_PROJECT
+  main:
+    web-application-type: servlet
+    banner-mode: log
+  profiles:
+    include: version-info
+#  todo enter your database credentials here...
+#  datasource:
+#    url: ...
+#    username: ...
+#    password: ...
+
+jwt:
+  jwkSetWellKnownUrl: ${seshat.url}/api/oauth/keys
+
+myplant:
+  openid:
+    issuer-url: ${seshat.url}/api/oauth
+    verify-issuer: false
+    # TODO app-id and app-secret should be injected by k8 config
+    app-id: ${APP_ID}
+    app-secret: ${APP_SECRET}
+
+  # todo review these settings for your project
+  feign:
+    token-handling:
+      use-client-credentials: true
+      forward-incoming: true
+
+logging.level:
+  # for logging the banner
+  org.springframework.boot.SpringApplication: info
+  # sample log setting:
+  io.myplant.template: info
+
+info:
+  build:
+    buildTime: ${appInfo.buildTime}
+    version: ${appInfo.version}
+
+#TODO veify path
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    path: /v3/api-docs
+  packages-to-scan: io.myplant.template.controller
+  base-url: ${seshat.url}/ws/TEMPLATE_PROJECT
+
+management:
+  endpoints:
+    web.exposure.include: health,info

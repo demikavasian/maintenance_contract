@@ -1,0 +1,158 @@
+###
+# Updates local GitHub actions with new releases from the template repository.
+#
+# Created by: Nikolaus Krismer
+###
+name: Update GitHub actions
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/*auto-update*'
+
+jobs:
+  updateGitHubActions:
+    name: 'Job: Update GH actions'
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    runs-on: [self-hosted-standard]
+    concurrency:
+      group: update_${{ github.ref }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - name: Allow dependabot to check for version
+        uses: myplant-io/.github@v1.3.3
+
+      - name: Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout GitHub actions repo
+        uses: actions/checkout@v4
+        with:
+          repository: myplant-io/.github
+          token: ${{ secrets.CI_PAT }}
+          path: source
+          ref: v${{ steps.dependabot-metadata.outputs.new-version }}
+
+      - name: Checkout git repository
+        if: startsWith(github.event_name , 'pull_request') == false
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: target
+          persist-credentials: false
+
+      - name: Checkout git repository (on PR)
+        if: startsWith(github.event_name , 'pull_request')
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: target
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set env 'BRANCH_NAME'
+        run: echo BRANCH_NAME="${GITHUB_REF#refs/heads/}" >> ${GITHUB_ENV}
+
+      - name: Set env 'BRANCH_NAME' (on PR)
+        if: startsWith(github.event_name , 'pull_request')
+        run: echo BRANCH_NAME="${{ github.event.pull_request.head.ref }}" >> ${GITHUB_ENV}
+
+      - name: Set 'SOURCE_DIR'
+        run: echo SOURCE_DIR="source/workflow-templates" >> ${GITHUB_ENV}
+
+      - name: Set 'TARGET_DIR'
+        run: echo TARGET_DIR="target/.github/workflows" >> ${GITHUB_ENV}
+
+      - name: Dump GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+
+      - name: Determine file extensions
+        run: echo FILE_TYPE=$(ls ${{ env.TARGET_DIR }}/auto-update* |  tr . \\n | tail -n1) >> ${GITHUB_ENV}
+
+      - name: Set project type to gradle
+        run: echo PROJECT_TYPE="unknown" >> ${GITHUB_ENV}
+
+      - name: Test project-type (for gradle) (gradle wrapper based - old approach)
+        id: determine-type-gradle-1
+        run: echo cnt_validations=$(ls ${{ env.TARGET_DIR }}/deploy* | xargs grep -w 'gradle/wrapper-validation-action' | wc -l) >> ${GITHUB_OUTPUT}
+
+      - name: Test project-type (for gradle) (gradle wrapper based - newer approach)
+        id: determine-type-gradle-2
+        run: echo cnt_validations=$(ls ${{ env.TARGET_DIR }}/deploy* | xargs grep -w 'gradle/actions/wrapper-validation' | wc -l) >> ${GITHUB_OUTPUT}
+
+      - name: Test project-type (for gradle) (gradle setup based)
+        id: determine-type-gradle-3
+        run: echo cnt_validations=$(ls ${{ env.TARGET_DIR }}/deploy* | xargs grep -w 'gradle/actions/setup-gradle' | wc -l) >> ${GITHUB_OUTPUT}
+
+      - name: Set project type to gradle
+        if: steps.determine-type-gradle-1.outputs.cnt_validations != '0' || steps.determine-type-gradle-2.outputs.cnt_validations != '0' || steps.determine-type-gradle-3.outputs.cnt_validations != '0'
+        run: echo PROJECT_TYPE=gradle >> ${GITHUB_ENV}
+
+      - name: Test project-type (for yarn classic)
+        id: determine-type-yarn
+        run: echo cnt_validations=$(ls ${{ env.TARGET_DIR }}/deploy* | xargs grep -w 'NPM_REGISTRY_AUTH' | wc -l) >> ${GITHUB_OUTPUT}
+
+      - name: Set project type to yarn classic
+        if: steps.determine-type-yarn.outputs.cnt_validations != '0'
+        run: echo PROJECT_TYPE=yarn >> ${GITHUB_ENV}
+
+      - name: Test project-type (for yarn2+)
+        id: determine-type-yarn2
+        run: echo cnt_validations=$(ls ${{ env.TARGET_DIR }}/deploy* | xargs grep -w 'YARN_NPM_AUTH_TOKEN' | wc -l) >> ${GITHUB_OUTPUT}
+
+      - name: Set project type to yarn2+
+        if: steps.determine-type-yarn2.outputs.cnt_validations != '0'
+        run: echo PROJECT_TYPE=yarn2 >> ${GITHUB_ENV}
+
+      - name: Log env context
+        run: echo $JSON | jq
+        env:
+          JSON: ${{ toJSON(env) }}
+
+      - name: Log GitHub context
+        run: echo $JSON | jq
+        env:
+          JSON: ${{ toJSON(github) }}
+
+      - name: List source contents
+        run: ls ${{ env.SOURCE_DIR }}
+
+      - name: List target contents
+        run: ls ${{ env.TARGET_DIR }}
+
+      - name: Move relevant GitHub actions in place
+        if: env.PROJECT_TYPE != 'unknown'
+        run: |
+          mv ${{ env.SOURCE_DIR}}/common-auto-update.yml ${{ env.TARGET_DIR }}/auto-update.${{ env.FILE_TYPE }}
+          mv ${{ env.SOURCE_DIR}}/common-merge.yml ${{ env.TARGET_DIR }}/merge.${{ env.FILE_TYPE }}
+          mv ${{ env.SOURCE_DIR}}/${{ env.PROJECT_TYPE }}-dependency-check.yml ${{ env.TARGET_DIR }}/dependency-check.${{ env.FILE_TYPE }} 2>/dev/null || :
+          mv ${{ env.SOURCE_DIR}}/${{ env.PROJECT_TYPE }}-deploy.yml ${{ env.TARGET_DIR }}/deploy.${{ env.FILE_TYPE }} 2>/dev/null || :
+          mv ${{ env.SOURCE_DIR}}/${{ env.PROJECT_TYPE }}-sonarqube.yml ${{ env.TARGET_DIR }}/sonarqube.${{ env.FILE_TYPE }} 2>/dev/null || :
+          mv ${{ env.SOURCE_DIR}}/${{ env.PROJECT_TYPE }}-test.yml ${{ env.TARGET_DIR }}/test.${{ env.FILE_TYPE }} 2>/dev/null || :
+
+      - name: Move relevant GitHub actions in place
+        if: env.PROJECT_TYPE == 'unknown'
+        run: |
+          mv ${{ env.SOURCE_DIR}}/common-auto-update.yml ${{ env.TARGET_DIR }}/auto-update.${{ env.FILE_TYPE }}
+          mv ${{ env.SOURCE_DIR}}/common-merge.yml ${{ env.TARGET_DIR }}/merge.${{ env.FILE_TYPE }}
+          mv ${{ env.SOURCE_DIR}}/common-sonarqube.yml ${{ env.TARGET_DIR }}/sonarqube.${{ env.FILE_TYPE }}
+
+      - name: Commit and push changes
+        uses: actions-js/push@v1.5
+        with:
+          branch: ${{ env.BRANCH_NAME }}
+          directory: ${{ env.TARGET_DIR }}
+          empty: true
+          github_token: ${{ secrets.CI_PAT }}
+          message: 'build: auto-update of GitHub actions [skip ci]'
