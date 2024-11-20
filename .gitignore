@@ -5,6 +5,7 @@ lombok.config
 hs_err_pid*
 
 .gradle
+gradle.properties
 build/
 /out/
 !gradle/wrapper/gradle-wrapper.jar
