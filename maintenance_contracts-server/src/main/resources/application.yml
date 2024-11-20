@@ -1,0 +1,26 @@
+server:
+  port: 7077
+
+spring:
+  application:
+    name: maintenance_contracts
+  main:
+    web-application-type: servlet
+    banner-mode: log
+  profiles:
+    active: local
+    include: version-info
+
+
+logging.level:
+  org.springframework.boot.SpringApplication: info
+  io.myplant.maintenancecontact: info
+
+info:
+  build:
+    buildTime: ${appInfo.buildTime}
+    version: ${appInfo.version}
+
+management:
+  endpoints:
+    web.exposure.include: health,info

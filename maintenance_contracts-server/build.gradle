@@ -1,0 +1,95 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
+apply plugin: 'io.myplant.gradle.dockerbuild'
+
+dependencies {
+    // spring
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-cache')
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    // DB
+    implementation('org.flywaydb:flyway-core')
+    implementation("org.postgresql:postgresql")
+
+
+    // caching
+    implementation('com.github.ben-manes.caffeine:caffeine:3.1.5')
+
+    // myplant commons
+    implementation "io.myplant:commons:${commonsVersion}"
+    implementation "io.myplant:commons-rest:${commonsVersion}"
+    implementation "io.myplant:commons-data:${commonsVersion}"
+    implementation "io.myplant:commons-networking:${commonsVersion}"
+    implementation "io.myplant:commons-feign-blocking:${commonsVersion}"
+
+    implementation 'io.myplant.maintenanceevents:maintenance-events-api:5.37.0-rc.1'
+    implementation 'io.myplant.maintenanceplans:maintenance-plans-api:4.7.1-rc.0'
+    implementation('io.myplant:maintenance-forecast-api:5.5.0-rc.1'){
+        exclude group: 'org.springframework.boot', module: 'spring-boot-dependencies'
+    }
+    // Access own API
+    implementation project(':maintenance_contracts-api')
+
+    //Additional
+
+
+    // mapstruct
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    compileOnly("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+
+    // swagger doc
+    implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0')
+
+    runtimeOnly('net.logstash.logback:logstash-logback-encoder:7.4')
+
+    // testing (Junit 5 tests):
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: "org.junit.vintage"
+    }
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+}
+
+innioDockerBuild {
+    useCustomCaCerts true
+    args('-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts')
+    repositoryName 'myplant-io'
+}
+
+bootJar {
+    archiveFileName = "${artifactName}.jar"
+}
+
+jar {
+    enabled = false
+    archiveFileName = "${artifactName}.jar"
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    exclude '**/model/**'
+}
+
+afterEvaluate {
+    dockerCreate.configure {
+        doFirst {
+            copy {
+                from "src/main/certs/cacerts"
+                into "build/docker/"
+            }
+            copyFile('cacerts', '/etc/ssl/certs/java/cacerts')
+        }
+    }
+}

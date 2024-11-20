@@ -1,10 +1,10 @@
-import static io.myplant.gradle.standards.GitUtils.getVersion
-
 buildscript {
     ext {
-        commonsVersion = '11.4.5'
-        springBootVersion = '3.3.2'
-        springCloudVersion = '2023.0.3'
+        artifactName = project.name + '_' + getVersion()
+        springBootVersion = '3.1.5'
+        springCloudVersion = '2022.0.4'
+        commonsVersion = '11.2.2'
+        mapstructVersion = '1.5.5.Final'
     }
 
     def myPlantRepo = Eval.me(innioRepositories)['myPlant']
@@ -13,25 +13,23 @@ buildscript {
         maven {
             url myPlantRepo['url']
             credentials {
-                username myPlantRepo['username'].toString()
-                password myPlantRepo['password'].toString()
+                username = myPlantRepo['username']
+                password = myPlantRepo['password']
             }
         }
+        mavenCentral()
         gradlePluginPortal()
     }
     dependencies {
-        classpath "io.myplant.gradle:gradle-plugins:3.9.0"
+        classpath "io.myplant.gradle:gradle-plugins:3.3.0"
     }
 }
 
-ext {
-    artifactName = project.name + '_' + getVersion(project)
-}
+apply plugin: 'io.myplant.gradle.standards'
 
 allprojects {
-    group 'io.myplant'
-
     apply plugin: 'java-library'
+    group 'io.myplant'
 
     java {
         toolchain {
@@ -43,32 +41,21 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'io.myplant.gradle.standards'
 
     dependencies {
-        // spring boot
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
         implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+        implementation ('io.hypersistence:hypersistence-utils-hibernate-60:3.7.0')
 
-        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
 
-        // logging
-        implementation('org.slf4j:jcl-over-slf4j:2.0.9')
-        implementation('ch.qos.logback:logback-classic:1.4.11')
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
 
         // miscellaneous
-        implementation('commons-io:commons-io:2.16.1')
-        implementation('org.apache.commons:commons-lang3:3.17.0')
+        implementation('org.apache.commons:commons-lang3:3.14.0')
+        implementation('commons-io:commons-io:2.15.0')
         implementation('org.apache.commons:commons-collections4:4.4')
-    }
 
-    test {
-        useJUnitPlatform()
-        systemProperty 'spring.profiles.active', 'test'
-        systemProperty 'user.timezone', 'UTC'
-
-        testLogging {
-            events 'started', 'passed', 'skipped', 'failed'
-        }
+        // testing
+        testImplementation('org.hamcrest:hamcrest-all:1.3')
     }
 }
