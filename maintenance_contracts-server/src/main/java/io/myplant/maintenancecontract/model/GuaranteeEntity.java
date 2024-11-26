@@ -1,14 +1,15 @@
 package io.myplant.maintenancecontract.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "guarantee")
+@EqualsAndHashCode(exclude = {"assetEntity"})
 public class GuaranteeEntity {
 
     @Id
@@ -25,7 +26,6 @@ public class GuaranteeEntity {
     @Column(name = "unit_of_measure", nullable = false)
     private String unitOfMeasure;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private AssetEntity assetEntity;

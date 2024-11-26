@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 import java.util.List;
 import java.util.Set;
 
-@Mapper(componentModel = "spring", uses = {ClauseMapper.class, GuaranteeMapper.class, ScopeMapper.class})
+@Mapper(componentModel = "spring", uses = {ClauseMapper.class, GuaranteeMapper.class, ScopeMapper.class, AdditionalScopeMapper.class})
 public interface AssetMapper {
 
     @Mapping(
@@ -26,28 +26,20 @@ public interface AssetMapper {
             target = "scopes",
             qualifiedByName = "scopeEntitySetToScopeList"
     )
+    @Mapping(source = "assetEntity.additionalScopeEntities",
+            target = "assetAdditionalScope",
+            qualifiedByName = "entitySetToAdditionScopeList")
     Asset toResponse(AssetEntity assetEntity);
 
     @Mapping(
             source = "asset.clause",
             target = "clauseEntity",
             qualifiedByName = "clauseToClauseEntity")
-    @Mapping(
-            source = "asset.guarantees",
-            target = "guaranteeEntities",
-            qualifiedByName = "guaranteeListToGuaranteeEntitySet"
-    )
-    @Mapping(
-            source = "asset.scopes",
-            target = "scopeEntities",
-            qualifiedByName = "scopeListToScopeEntitySet"
-    )
+    @Named("assetToAssetEntity")
     AssetEntity toEntity(Asset asset);
 
     @Named("assetEntitySetToAssetList")
     List<Asset> assetEntitySetToAssetList(Set<AssetEntity> set);
 
-    @Named("assetListToAssetEntitySet")
-    Set<AssetEntity> assetListToAssetEntitySet(List<Asset> list);
 
 }

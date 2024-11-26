@@ -25,7 +25,7 @@ public class ContractController {
 
     @PostMapping("/save")
     public ResponseEntity<Contract> saveContract(@Valid @RequestBody @ValidScope Contract contract) {
-        return contractService.saveContract(contract);
+        return ResponseEntity.ok(contractService.saveContract(contract));
     }
 
 

@@ -15,9 +15,9 @@ public class Activity extends ScopeValue {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("activity_service")
+    @JsonProperty("activityService")
     private ActivityService activityService;
 
-    @JsonProperty("activity_category")
+    @JsonProperty("activityCategory")
     private ActivityCategory activityCategory;
 }

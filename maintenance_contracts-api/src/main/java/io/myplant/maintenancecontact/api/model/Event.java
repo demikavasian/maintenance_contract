@@ -15,9 +15,9 @@ public class Event extends ScopeValue {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("event_service")
+    @JsonProperty("eventService")
     private EventService eventService;
 
-    @JsonProperty("event_category")
+    @JsonProperty("eventCategory")
     private EventCategory eventCategory;
 }

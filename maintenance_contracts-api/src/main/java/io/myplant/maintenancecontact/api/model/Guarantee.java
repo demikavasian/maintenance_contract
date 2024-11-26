@@ -19,7 +19,7 @@ public class Guarantee {
     @JsonProperty("value")
     private String value;
 
-    @JsonProperty("unit_of_measure")
+    @JsonProperty("unitOfMeasure")
     private String unitOfMeasure;
 
 }

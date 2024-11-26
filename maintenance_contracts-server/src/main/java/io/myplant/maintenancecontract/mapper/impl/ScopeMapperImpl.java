@@ -135,18 +135,4 @@ public class ScopeMapperImpl implements ScopeMapper {
 
         return list;
     }
-
-    @Override
-    public Set<ScopeEntity> scopeListToScopeEntitySet(List<Scope> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        Set<ScopeEntity> set = new LinkedHashSet<>( Math.max( (int) ( list.size() / .75f ) + 1, 16 ) );
-        for ( Scope Scope : list ) {
-            set.add( toEntity( Scope ) );
-        }
-
-        return set;
-    }
 }

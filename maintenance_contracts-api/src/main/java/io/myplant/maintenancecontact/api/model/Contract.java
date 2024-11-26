@@ -43,4 +43,7 @@ public class Contract {
     @JsonProperty("assets")
     private List<Asset> assets = new ArrayList<>();
 
+    @JsonProperty("contractAdditionalScope")
+    private List<ContractAdditionalScope> contractAdditionalScope = new ArrayList<>();
+
 }

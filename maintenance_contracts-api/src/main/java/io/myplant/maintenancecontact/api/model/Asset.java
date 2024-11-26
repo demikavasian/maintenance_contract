@@ -29,4 +29,7 @@ public class Asset {
     @JsonProperty("scopes")
     private List<Scope> scopes = new ArrayList<>();
 
+    @JsonProperty("assetAdditionalScope")
+    private List<AssetAdditionalScope> assetAdditionalScope = new ArrayList<>();
+
 }

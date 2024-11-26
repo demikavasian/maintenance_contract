@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ComponentEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -23,5 +24,4 @@ public class ComponentEntity {
 
     @OneToOne(mappedBy = "componentEntity")
     private ScopeEntity scopeEntity;
-
 }

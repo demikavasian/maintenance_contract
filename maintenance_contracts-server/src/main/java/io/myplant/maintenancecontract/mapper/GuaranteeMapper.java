@@ -11,14 +11,14 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface GuaranteeMapper {
 
+    @Named("guaranteeEntityToGuarantee")
     Guarantee toResponse(GuaranteeEntity entity);
 
+    @Named("guaranteeToGuaranteeEntity")
     GuaranteeEntity toEntity(Guarantee guarantee);
 
     @Named("guaranteeEntitySetToGuaranteeList")
     List<Guarantee> guaranteeEntitySetToGuaranteeList(Set<GuaranteeEntity> entities);
 
-    @Named("guaranteeListToGuaranteeEntitySet")
-    Set<GuaranteeEntity> guaranteeListToGuaranteeEntitySet(List<Guarantee> guarantees);
 
 }

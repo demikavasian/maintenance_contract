@@ -16,19 +16,19 @@ public class Scope{
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("scope_type")
+    @JsonProperty("scopeType")
     private ScopeType scopeType;
 
-    @JsonProperty("scope_value")
+    @JsonProperty("scopeValue")
     private ScopeValue scopeValue;
 
-    @JsonProperty("scope_coverage")
+    @JsonProperty("scopeCoverage")
     private ScopeCoverage scopeCoverage;
 
-    @JsonProperty("additional_attribute")
+    @JsonProperty("additionalAttribute")
     private String additionalAttribute;
 
-    @JsonProperty("additional_info")
+    @JsonProperty("additionalInfo")
     private String additionalInfo;
 
 }

@@ -13,9 +13,9 @@ public class Component extends ScopeValue {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("component_node_id")
+    @JsonProperty("componentNodeId")
     private Long componentNodeId;
 
-    @JsonProperty("component_name")
+    @JsonProperty("componentName")
     private String componentName;
 }

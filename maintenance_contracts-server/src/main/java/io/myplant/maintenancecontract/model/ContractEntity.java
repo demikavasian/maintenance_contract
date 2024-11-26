@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.myplant.maintenancecontact.api.model.enums.ContractStatus;
 import io.myplant.maintenancecontact.api.model.enums.OfferingType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -16,9 +17,11 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "contract")
+@EqualsAndHashCode(exclude = {"additionalScopeEntities", "assetEntities"})
 public class ContractEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -40,7 +43,30 @@ public class ContractEntity {
     private LocalDate exclusiveEndDate;
 
     @OneToMany(mappedBy = "contractEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AdditionalScopeEntity> additionalScopeEntities = new HashSet<>();
+
+    @OneToMany(mappedBy = "contractEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<AssetEntity> assetEntities = new HashSet<>();
 
+
+    public void addAssetEntity(AssetEntity assetEntity) {
+        assetEntities.add(assetEntity);
+        assetEntity.setContractEntity(this);
+    }
+
+    public void removeAssetEntity(AssetEntity assetEntity) {
+        assetEntities.remove(assetEntity);
+        assetEntity.setContractEntity(null);
+    }
+
+    public void addAdditionalScopeEntity(AdditionalScopeEntity additionalScopeEntity) {
+        additionalScopeEntities.add(additionalScopeEntity);
+        additionalScopeEntity.setContractEntity(this);
+    }
+
+    public void removeAdditionalScopeEntity(AdditionalScopeEntity additionalScopeEntity) {
+        additionalScopeEntities.remove(additionalScopeEntity);
+        additionalScopeEntity.setContractEntity(null);
+    }
 
 }

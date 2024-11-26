@@ -48,4 +48,9 @@ public class ClauseEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate warrantyEndDate;
 
+    @Column(name = "maintenance_section")
+    private String maintenanceSection;
+
+    @Column(name = "maintenance_schedule")
+    private String maintenanceSchedule;
 }

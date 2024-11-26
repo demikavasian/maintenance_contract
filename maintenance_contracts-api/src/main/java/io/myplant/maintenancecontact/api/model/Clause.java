@@ -15,45 +15,45 @@ import java.time.LocalDate;
 @JsonRootName("clause")
 public class Clause {
 
-    @JsonProperty("id")
+    @JsonProperty("unitEndCounter")
     private Integer unitEndCounter;
 
-    @JsonProperty("minimum_oph_per_year")
+    @JsonProperty("minimumOphPerYear")
     private Integer minimumOphPerYear;
 
-    @JsonProperty("maximum_oph")
+    @JsonProperty("maximumOph")
     private String maximumOph;
 
-    @JsonProperty("expected_start_stops_per_year")
+    @JsonProperty("expectedStartStopsPerYear")
     private Integer expectedStartStopsPerYear;
 
-    @JsonProperty("extra_work_discount_material")
+    @JsonProperty("extraWorkDiscountMaterial")
     private Double extraWorkDiscountMaterial;
 
-    @JsonProperty("extra_work_discount_labor")
+    @JsonProperty("extraWorkDiscountLabor")
     private Double extraWorkDiscountLabor;
 
-    @JsonProperty("reaction_time_personnel")
+    @JsonProperty("reactionTimePersonnel")
     private String reactionTimePersonnel;
 
-    @JsonProperty("reaction_time_initiate")
+    @JsonProperty("reactionTimeInitiate")
     private String reactionTimeInitiate;
 
-    @JsonProperty("total_efficiency")
+    @JsonProperty("totalEfficiency")
     private String totalEfficiency;
 
-    @JsonProperty("warranty_start_date")
+    @JsonProperty("warrantyStartDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate warrantyStartDate;
 
-    @JsonProperty("warranty_end_date")
+    @JsonProperty("warrantyEndDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate warrantyEndDate;
 
-    @JsonProperty("maintenance_section")
+    @JsonProperty("maintenanceSection")
     private String maintenanceSection;
 
-    @JsonProperty("maintenance_schedule")
+    @JsonProperty("maintenanceSchedule")
     private String maintenanceSchedule;
 
 
