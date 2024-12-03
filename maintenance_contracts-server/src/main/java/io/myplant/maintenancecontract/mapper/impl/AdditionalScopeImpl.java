@@ -14,6 +14,9 @@ import java.util.Set;
 public class AdditionalScopeImpl implements AdditionalScopeMapper{
     @Override
     public AdditionalScopeEntity assetAdditionalScopeToEntity(AssetAdditionalScope assetAdditionalScope) {
+        if(assetAdditionalScope == null){
+            return null;
+        }
         AdditionalScopeEntity additionalScopeEntity = new AdditionalScopeEntity();
         additionalScopeEntity.setService(assetAdditionalScope.getService());
         return additionalScopeEntity;
@@ -21,6 +24,9 @@ public class AdditionalScopeImpl implements AdditionalScopeMapper{
 
     @Override
     public AdditionalScopeEntity contractAdditionalScopeToEntity(ContractAdditionalScope contractAdditionalScope) {
+        if(contractAdditionalScope == null){
+            return null;
+        }
         AdditionalScopeEntity additionalScopeEntity = new AdditionalScopeEntity();
         additionalScopeEntity.setService(contractAdditionalScope.getService());
         return additionalScopeEntity;
@@ -28,6 +34,9 @@ public class AdditionalScopeImpl implements AdditionalScopeMapper{
 
     @Override
     public AssetAdditionalScope entityToAssetAdditionalScope(AdditionalScopeEntity additionalScopeEntity) {
+        if(additionalScopeEntity == null){
+            return null;
+        }
         AssetAdditionalScope assetAdditionalScope = new AssetAdditionalScope();
         assetAdditionalScope.setService(additionalScopeEntity.getService());
         return assetAdditionalScope;
@@ -35,6 +44,9 @@ public class AdditionalScopeImpl implements AdditionalScopeMapper{
 
     @Override
     public ContractAdditionalScope entityToContractAdditionalScope(AdditionalScopeEntity additionalScopeEntity) {
+        if(additionalScopeEntity == null){
+            return null;
+        }
         ContractAdditionalScope contractAdditionalScope = new ContractAdditionalScope();
         contractAdditionalScope.setService(additionalScopeEntity.getService());
         return contractAdditionalScope;

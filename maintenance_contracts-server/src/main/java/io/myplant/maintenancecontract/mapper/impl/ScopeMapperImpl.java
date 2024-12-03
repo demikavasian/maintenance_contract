@@ -99,6 +99,9 @@ public class ScopeMapperImpl implements ScopeMapper {
     }
 
     protected ScopeValue getScopeValueFromActivityEntity(ActivityEntity activityEntity) {
+        if(activityEntity == null){
+            return null;
+        }
         Activity activity = new Activity();
         activity.setId(activityEntity.getId());
         activity.setActivityService(activityEntity.getActivityService());
@@ -107,6 +110,9 @@ public class ScopeMapperImpl implements ScopeMapper {
     }
 
     protected ScopeValue getScopeValueFromEventEntity(EventEntity eventEntity) {
+        if(eventEntity == null){
+            return null;
+        }
         Event event = new Event();
         event.setId(eventEntity.getId());
         event.setEventService(eventEntity.getEventService());
@@ -115,6 +121,9 @@ public class ScopeMapperImpl implements ScopeMapper {
     }
 
     protected ScopeValue getScopeValueFromComponentEntity(ComponentEntity componentEntity) {
+        if(componentEntity == null){
+            return null;
+        }
         io.myplant.maintenancecontact.api.model.Component component = new io.myplant.maintenancecontact.api.model.Component();
         component.setId(componentEntity.getId());
         component.setComponentName(componentEntity.getComponentName());

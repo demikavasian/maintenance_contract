@@ -20,4 +20,7 @@ public class Activity extends ScopeValue {
 
     @JsonProperty("activityCategory")
     private ActivityCategory activityCategory;
+
+    @JsonProperty("activityFrequency")
+    private String activityFrequency;
 }

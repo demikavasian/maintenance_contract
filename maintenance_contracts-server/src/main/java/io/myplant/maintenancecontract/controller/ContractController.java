@@ -1,6 +1,7 @@
 package io.myplant.maintenancecontract.controller;
 
 import io.myplant.maintenancecontact.api.model.Contract;
+import io.myplant.maintenancecontact.api.validation.ValidContract;
 import io.myplant.maintenancecontact.api.validation.ValidScope;
 import io.myplant.maintenancecontract.service.ContractService;
 import jakarta.validation.Valid;
@@ -24,7 +25,7 @@ public class ContractController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Contract> saveContract(@Valid @RequestBody @ValidScope Contract contract) {
+    public ResponseEntity<Contract> saveContract(@Valid @RequestBody @ValidContract @ValidScope Contract contract) {
         return ResponseEntity.ok(contractService.saveContract(contract));
     }
 

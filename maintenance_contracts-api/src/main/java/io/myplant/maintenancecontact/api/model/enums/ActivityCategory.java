@@ -1,5 +1,18 @@
 package io.myplant.maintenancecontact.api.model.enums;
 
 public enum ActivityCategory {
-    Replace,
+    SEAL,
+    RETIGHTEN,
+    REPLACE,
+    INSPECT,
+    OVERHAUL,
+    CHECK,
+    CLEAN,
+    MEASURE,
+    EXECUTE,
+    LUBRICATE,
+    DRAIN,
+    ADJUST,
+    FILL,
+    VENT;
 }

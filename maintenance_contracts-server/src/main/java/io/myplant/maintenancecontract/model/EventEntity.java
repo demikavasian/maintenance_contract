@@ -26,6 +26,9 @@ public class EventEntity {
     @Column(name = "event_category")
     private EventCategory EventCategory;
 
+    @Column(name = "event_frequency")
+    private String eventFrequency;
+
     @OneToOne(mappedBy = "eventEntity")
     private ScopeEntity scopeEntity;
 

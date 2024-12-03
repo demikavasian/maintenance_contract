@@ -81,8 +81,11 @@ public class ScopeDeserializer extends JsonDeserializer<Scope> {
         if (activity.getActivityCategory() == null) {
             throw new JsonMappingException(p, "'activityCategory' is required for ACTIVITY scopeType");
         }
+        if (activity.getActivityFrequency() == null || activity.getActivityFrequency().isEmpty()) {
+            throw new JsonMappingException(p, "'activityFrequency' is required for ACTIVITY scopeType");
+        }
 
-        validateNoExtraFields(node, new String[]{"id", "activityService", "activityCategory"}, p);
+        validateNoExtraFields(node, new String[]{"id", "activityService", "activityCategory", "activityFrequency"}, p);
     }
 
     private void validateEvent(JsonNode node, Event event, JsonParser p) throws JsonMappingException {
@@ -92,8 +95,11 @@ public class ScopeDeserializer extends JsonDeserializer<Scope> {
         if (event.getEventCategory() == null) {
             throw new JsonMappingException(p, "'eventCategory' is required for EVENT scopeType");
         }
+        if (event.getEventFrequency() == null || event.getEventFrequency().isEmpty()) {
+            throw new JsonMappingException(p, "'eventFrequency' is required for EVENT scopeType");
+        }
 
-        validateNoExtraFields(node, new String[]{"id", "eventService", "eventCategory"}, p);
+        validateNoExtraFields(node, new String[]{"id", "eventService", "eventCategory", "eventFrequency"}, p);
     }
 
     private void validateComponent(JsonNode node, Component component, JsonParser p) throws JsonMappingException {
@@ -103,8 +109,11 @@ public class ScopeDeserializer extends JsonDeserializer<Scope> {
         if (component.getComponentName() == null || component.getComponentName().isEmpty()) {
             throw new JsonMappingException(p, "'componentName' is required for COMPONENT scopeType");
         }
+        if (component.getComponentQuantity() == null || component.getComponentQuantity().isEmpty()) {
+            throw new JsonMappingException(p, "'componentQuantity' is required for COMPONENT scopeType");
+        }
 
-        validateNoExtraFields(node, new String[]{"id", "componentNodeId", "componentName"}, p);
+        validateNoExtraFields(node, new String[]{"id", "componentNodeId", "componentName", "componentQuantity"}, p);
     }
 
     private void validateNoExtraFields(JsonNode node, String[] expectedFields, JsonParser p) throws JsonMappingException {

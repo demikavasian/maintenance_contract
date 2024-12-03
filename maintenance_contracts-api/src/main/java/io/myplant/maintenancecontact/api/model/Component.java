@@ -18,4 +18,7 @@ public class Component extends ScopeValue {
 
     @JsonProperty("componentName")
     private String componentName;
+
+    @JsonProperty("componentQuantity")
+    private String componentQuantity;
 }

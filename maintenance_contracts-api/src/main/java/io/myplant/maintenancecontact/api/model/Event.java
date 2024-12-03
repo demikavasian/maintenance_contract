@@ -20,4 +20,7 @@ public class Event extends ScopeValue {
 
     @JsonProperty("eventCategory")
     private EventCategory eventCategory;
+
+    @JsonProperty("eventFrequency")
+    private String eventFrequency;
 }

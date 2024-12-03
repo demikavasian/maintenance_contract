@@ -22,6 +22,9 @@ public class ComponentEntity {
     @Column(name = "component_name")
     private String componentName;
 
+    @Column(name = "component_quantity")
+    private String componentQuantity;
+
     @OneToOne(mappedBy = "componentEntity")
     private ScopeEntity scopeEntity;
 }

@@ -26,6 +26,9 @@ public class ActivityEntity {
     @Column(name = "activity_category")
     private ActivityCategory activityCategory;
 
+    @Column(name = "activity_frequency")
+    private String activityFrequency;
+
     @OneToOne(mappedBy = "activityEntity")
     private ScopeEntity scopeEntity;
 

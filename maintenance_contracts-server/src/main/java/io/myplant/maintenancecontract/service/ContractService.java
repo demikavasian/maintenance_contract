@@ -8,13 +8,14 @@ import io.myplant.maintenancecontract.repository.ContractRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 @Transactional
@@ -28,20 +29,26 @@ public class ContractService {
     private final AdditionalScopeMapper additionalScopeMapper;
 
     public Contract saveContract(@Valid Contract contract) {
-        ContractEntity contractEntity = contractMapper.toEntity(contract);
+        try {
+            log.info("Saving contract with name: {}", contract.getName());
+            ContractEntity contractEntity = contractMapper.toEntity(contract);
 
-        if(contract.getAssets() != null && !contract.getAssets().isEmpty()) {
-            contract.getAssets()
-                    .stream()
-                    .map(this::fillAssetEntity)
-                    .forEach(contractEntity::addAssetEntity);
+            if (contract.getAssets() != null && !contract.getAssets().isEmpty()) {
+                contract.getAssets()
+                        .stream()
+                        .map(this::fillAssetEntity)
+                        .forEach(contractEntity::addAssetEntity);
+            }
+
+            if (contract.getContractAdditionalScope() != null && !contract.getContractAdditionalScope().isEmpty()) {
+                setAdditionalScopeToContractEntity(contractEntity, contract.getContractAdditionalScope());
+            }
+
+            return contractMapper.toResponse(contractRepository.save(contractEntity));
+        }catch (Exception e){
+            log.error("Error while saving contract with name: {}", contract.getName());
+            throw new RuntimeException("Error while saving contract");
         }
-
-        if (contract.getContractAdditionalScope() != null && !contract.getContractAdditionalScope().isEmpty()) {
-            setAdditionalScopeToContractEntity(contractEntity, contract.getContractAdditionalScope());
-        }
-
-        return contractMapper.toResponse(contractRepository.save(contractEntity));
     }
 
     private AssetEntity fillAssetEntity(Asset asset) {

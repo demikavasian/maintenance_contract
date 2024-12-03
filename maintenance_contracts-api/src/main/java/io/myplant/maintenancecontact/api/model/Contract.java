@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.myplant.maintenancecontact.api.model.enums.ContractStatus;
 import io.myplant.maintenancecontact.api.model.enums.OfferingType;
+import io.myplant.maintenancecontact.api.validation.ValidContract;
 import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JsonRootName("contract")
+@ValidContract
 public class Contract {
 
     @JsonProperty("id")
