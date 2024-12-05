@@ -2,13 +2,17 @@ package io.myplant.maintenancecontract.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "component")
 @DiscriminatorValue("COMPONENT")
+@EqualsAndHashCode(exclude = "scopeEntity")
+@ToString(exclude = "scopeEntity")
 public class ComponentEntity {
 
     @Id

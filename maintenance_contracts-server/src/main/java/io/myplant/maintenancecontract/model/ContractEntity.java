@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.myplant.maintenancecontact.api.model.enums.ContractStatus;
 import io.myplant.maintenancecontact.api.model.enums.OfferingType;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -17,7 +16,6 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "contract")
-@EqualsAndHashCode(exclude = {"additionalScopeEntities", "assetEntities"})
 public class ContractEntity {
 
     @Id

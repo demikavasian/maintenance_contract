@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "guarantee")
 @EqualsAndHashCode(exclude = {"assetEntity"})
+@ToString(exclude = "assetEntity")
 public class GuaranteeEntity {
 
     @Id

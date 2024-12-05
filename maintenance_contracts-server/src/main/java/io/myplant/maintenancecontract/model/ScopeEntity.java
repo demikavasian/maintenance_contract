@@ -6,13 +6,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "scope")
-@EqualsAndHashCode(exclude = {"assetEntity", "activityEntity", "eventEntity", "componentEntity"})
+@EqualsAndHashCode(exclude = "assetEntity")
+@ToString(exclude = "assetEntity")
 public class ScopeEntity {
 
     @Id

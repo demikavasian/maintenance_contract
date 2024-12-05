@@ -4,13 +4,17 @@ import io.myplant.maintenancecontact.api.model.enums.ActivityCategory;
 import io.myplant.maintenancecontact.api.model.enums.ActivityService;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "activity")
 @DiscriminatorValue("ACTIVITY")
+@EqualsAndHashCode(exclude = "scopeEntity")
+@ToString(exclude = "scopeEntity")
 public class ActivityEntity {
 
     @Id

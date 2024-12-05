@@ -2,10 +2,14 @@ package io.myplant.maintenancecontract.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
 @Table(name = "additional_scope")
+@EqualsAndHashCode(exclude = {"contractEntity", "assetEntity"})
+@ToString(exclude = {"contractEntity", "assetEntity"})
 public class AdditionalScopeEntity {
 
     @Id

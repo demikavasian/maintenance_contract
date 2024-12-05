@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class ClauseEntity {
 
     @Column(name = "unit_end_counter", nullable = false)
-    private Long unitEndCounter;
+    private Integer unitEndCounter;
 
     @Column(name = "minimum_oph_per_year")
     private Integer minimumOphPerYear;

@@ -4,13 +4,17 @@ import io.myplant.maintenancecontact.api.model.enums.EventCategory;
 import io.myplant.maintenancecontact.api.model.enums.EventService;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "event")
 @DiscriminatorValue("EVENT")
+@EqualsAndHashCode(exclude = "scopeEntity")
+@ToString(exclude = "scopeEntity")
 public class EventEntity {
 
     @Id

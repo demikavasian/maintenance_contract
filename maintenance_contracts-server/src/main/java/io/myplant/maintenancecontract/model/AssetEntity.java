@@ -1,10 +1,10 @@
 package io.myplant.maintenancecontract.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 import java.util.HashSet;
@@ -14,7 +14,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "asset")
-@EqualsAndHashCode(exclude = {"guaranteeEntities", "scopeEntities", "additionalScopeEntities"})
+@EqualsAndHashCode(exclude = "contractEntity")
+@ToString(exclude = "contractEntity")
 public class AssetEntity {
 
     @Id

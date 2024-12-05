@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class AdditionalScopeImpl implements AdditionalScopeMapper{
+public class AdditionalScopeMapperImpl implements AdditionalScopeMapper{
     @Override
     public AdditionalScopeEntity assetAdditionalScopeToEntity(AssetAdditionalScope assetAdditionalScope) {
         if(assetAdditionalScope == null){
@@ -58,7 +58,7 @@ public class AdditionalScopeImpl implements AdditionalScopeMapper{
             return null;
         }
 
-        List<AssetAdditionalScope> list = new ArrayList<AssetAdditionalScope>( entities.size() );
+        List<AssetAdditionalScope> list = new ArrayList<>( entities.size() );
         for ( AdditionalScopeEntity additionalScopeEntity : entities ) {
             list.add( entityToAssetAdditionalScope( additionalScopeEntity ) );
         }
@@ -73,7 +73,7 @@ public class AdditionalScopeImpl implements AdditionalScopeMapper{
             return null;
         }
 
-        List<ContractAdditionalScope> list = new ArrayList<ContractAdditionalScope>( entities.size() );
+        List<ContractAdditionalScope> list = new ArrayList<>( entities.size() );
         for ( AdditionalScopeEntity contractScopeEntity : entities ) {
             list.add( entityToContractAdditionalScope( contractScopeEntity ) );
         }
