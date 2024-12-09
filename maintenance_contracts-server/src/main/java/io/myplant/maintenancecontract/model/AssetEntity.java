@@ -23,6 +23,9 @@ public class AssetEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "asset_id", nullable = false)
+    private String assetId;
+
     @Embedded
     private ClauseEntity clauseEntity;
 

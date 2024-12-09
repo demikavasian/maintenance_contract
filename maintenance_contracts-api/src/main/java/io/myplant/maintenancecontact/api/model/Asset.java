@@ -19,6 +19,9 @@ public class Asset {
     @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("assetId")
+    private String assetId;
+
     @Embedded
     private Clause clause;
 

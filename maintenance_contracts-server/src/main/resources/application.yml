@@ -1,26 +1,62 @@
 server:
   port: 7077
 
-spring:
-  application:
-    name: maintenance_contracts
-  main:
-    web-application-type: servlet
-    banner-mode: log
-  profiles:
-    active: local
-    include: version-info
-
-
-logging.level:
-  org.springframework.boot.SpringApplication: info
-  io.myplant.maintenancecontact: info
-
-info:
-  build:
-    buildTime: ${appInfo.buildTime}
-    version: ${appInfo.version}
-
+api:
+  feign:
+    maintenance-forecast:
+      url: ${seshat.url}/ws/maintenance-forecast
 management:
   endpoints:
     web.exposure.include: health,info
+
+spring:
+  application:
+    name: maintenance-contracts
+  profiles:
+    group:
+      dev-env: local
+    include: version-info
+  cache:
+    type: caffeine
+  main:
+    web-application-type: servlet
+    banner-mode: log
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_URL}?useSSL=false&rewriteBatchedStatements=true
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      max-lifetime: 120000
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+seshat:
+  url: ${SESHAT_URL}
+
+jwt:
+  jwkSetWellKnownUrl: ${seshat.url}/api/oauth/keys
+
+myplant:
+  openid:
+    issuer-url: ${seshat.url}/api/oauth
+    verify-issuer: false
+    app-id: ${APP_ID}
+    app-secret: ${APP_SECRET}
+  feign:
+    token-handling:
+      use-client-credentials: true
+      forward-incoming: true
+
+logging.level:
+  org.springframework.boot.SpringApplication: info
+  io.myplant.template: info
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    path: /v3/api-docs
+  packages-to-scan: io.myplant.maintenancecontract.controller
+  base-url: ${seshat.url}/ws/maintenance-contracts

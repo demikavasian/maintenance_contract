@@ -39,10 +39,7 @@ public class ContractService {
                         .map(this::fillAssetEntity)
                         .forEach(contractEntity::addAssetEntity);
             }
-
-            if (contract.getContractAdditionalScope() != null && !contract.getContractAdditionalScope().isEmpty()) {
-                setAdditionalScopeToContractEntity(contractEntity, contract.getContractAdditionalScope());
-            }
+            setAdditionalScopeToContractEntity(contractEntity, contract.getContractAdditionalScope());
 
             return contractMapper.toResponse(contractRepository.save(contractEntity));
         }catch (Exception e){
@@ -51,37 +48,46 @@ public class ContractService {
         }
     }
 
-    private AssetEntity fillAssetEntity(Asset asset) {
+    public AssetEntity fillAssetEntity(Asset asset) {
         AssetEntity assetEntity = assetMapper.toEntity(asset);
-
-        if (asset.getGuarantees() != null && !asset.getGuarantees().isEmpty()) {
-            setGuaranteesToAssetEntity(assetEntity, asset.getGuarantees());
-        }
-
-        if (asset.getAssetAdditionalScope() != null && !asset.getAssetAdditionalScope().isEmpty()) {
-            setAdditionalScopeToAssetEntity(assetEntity, asset.getAssetAdditionalScope());
-        }
-
-        if (asset.getScopes() != null && !asset.getScopes().isEmpty()) {
-            setScopesToAssetEntity(assetEntity, asset.getScopes());
-        }
-
+        setGuaranteesToAssetEntity(assetEntity, asset.getGuarantees());
+        setAdditionalScopeToAssetEntity(assetEntity, asset.getAssetAdditionalScope());
+        setScopesToAssetEntity(assetEntity, asset.getScopes());
         return assetEntity;
     }
 
-    private void setAdditionalScopeToAssetEntity(AssetEntity assetEntity, List<AssetAdditionalScope> assetAdditionalScope) {
-        assetAdditionalScope.stream().map(additionalScopeMapper::assetAdditionalScopeToEntity).forEach(assetEntity::addAdditionalScopeEntity);
+    public void setAdditionalScopeToAssetEntity(AssetEntity assetEntity, List<AssetAdditionalScope> assetAdditionalScope) {
+        if (assetAdditionalScope == null) {
+            return;
+        }
+//        assetAdditionalScope.stream()
+//                .map(additionalScopeMapper::assetAdditionalScopeToEntity)
+//                .forEach(assetEntity::addAdditionalScopeEntity);
+
+        for (AssetAdditionalScope additionalScope : assetAdditionalScope) {
+            assetEntity.addAdditionalScopeEntity(additionalScopeMapper.assetAdditionalScopeToEntity(additionalScope));
+        }
     }
 
-    private void setAdditionalScopeToContractEntity(ContractEntity contractEntity, List<ContractAdditionalScope> contractAdditionalScope) {
+
+    public void setAdditionalScopeToContractEntity(ContractEntity contractEntity, List<ContractAdditionalScope> contractAdditionalScope) {
+        if (contractAdditionalScope == null) {
+            return;
+        }
         contractAdditionalScope.stream().map(additionalScopeMapper::contractAdditionalScopeToEntity).forEach(contractEntity::addAdditionalScopeEntity);
     }
 
-    private void setGuaranteesToAssetEntity(AssetEntity assetEntity, List<Guarantee> guarantees) {
+    public void setGuaranteesToAssetEntity(AssetEntity assetEntity, List<Guarantee> guarantees) {
+        if (guarantees == null) {
+            return;
+        }
         guarantees.stream().map(guaranteeMapper::toEntity).forEach(assetEntity::addGuaranteeEntity);
     }
 
-    private void setScopesToAssetEntity(AssetEntity assetEntity, List<Scope> scopes) {
+    public void setScopesToAssetEntity(AssetEntity assetEntity, List<Scope> scopes) {
+        if (scopes == null) {
+            return;
+        }
         scopes.stream().map(scopeMapper::toEntity).forEach(assetEntity::addScopeEntity);
     }
 

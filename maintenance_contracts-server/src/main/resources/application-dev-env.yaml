@@ -1,0 +1,27 @@
+# This configuration should work out the box with the dev env project found under
+# https://github.com/myplant-io/maintenance-dev-env
+#
+# You need to run the mysql and the redis (should be removed with DD-7261) from there
+#
+# Configure APP_ID, APP_SECRET either via a application-local.yaml together with the logging, or via env variables
+## database
+seshat:
+  url: https://alpha.staging.myplant.io
+
+aws:
+  accessKey: minio-myplant
+  secretKey: minio-myplant-secret
+  endpoint: http://localhost:9001
+
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: update
+
+  datasource:
+    url: jdbc:postgresql://localhost:5454/maintenance_contract?currentSchema=v_01&useSSL=false&rewriteBatchedStatements=true
+    username: maintenance_contracts
+    password: maintenance_contracts_password
